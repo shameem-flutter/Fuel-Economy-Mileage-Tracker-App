@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1031995325154",
+    "project_id": "fuel-economy-app",
+    "storage_bucket": "fuel-economy-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031995325154:android:7c378fc476b6f4bf513cbb",
+        "android_client_info": {
+          "package_name": "com.example.task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0cuVLFOXEkgGl6q-u58N1ebD1IJlGRkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
