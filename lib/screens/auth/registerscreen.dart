@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:task/screens/homescreen.dart';
+
+import 'package:task/screens/tripinputscreen.dart';
 
 class Registerscreen extends StatefulWidget {
   const Registerscreen({super.key});
@@ -12,9 +13,11 @@ class Registerscreen extends StatefulWidget {
 class _RegisterscreenState extends State<Registerscreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool loading = false;
 
   Future<void> registerUser() async {
+    if (!_formKey.currentState!.validate()) return;
     setState(() {
       loading = true;
     });
@@ -25,7 +28,7 @@ class _RegisterscreenState extends State<Registerscreen> {
       );
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Homescreen()),
+        MaterialPageRoute(builder: (context) => TripInputScreen()),
       );
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -36,6 +39,13 @@ class _RegisterscreenState extends State<Registerscreen> {
         loading = false;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -55,8 +65,10 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
             ),
             SizedBox(height: 25),
-            TextField(
+            TextFormField(
               controller: emailController,
+              validator: (val) => val!.isEmpty ? 'Email required' : null,
+
               decoration: InputDecoration(
                 hintText: "Enter the E-mail",
                 border: OutlineInputBorder(
@@ -65,8 +77,13 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
             ),
             SizedBox(height: 5),
-            TextField(
+            TextFormField(
               controller: passwordController,
+              validator: (val) => val!.length < 6
+                  ? 'Password must be at least 6 characters'
+                  : null,
+              obscureText: true,
+
               decoration: InputDecoration(
                 hintText: "Enter the Password",
                 border: OutlineInputBorder(
