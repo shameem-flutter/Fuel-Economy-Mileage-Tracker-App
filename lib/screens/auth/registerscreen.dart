@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:task/constants/color_constants.dart';
 
 import 'package:task/screens/tripinputscreen.dart';
+import 'package:task/widgets/textfield.dart';
 
 class Registerscreen extends StatefulWidget {
   const Registerscreen({super.key});
@@ -51,59 +54,79 @@ class _RegisterscreenState extends State<Registerscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Register the User",
-              style: TextStyle(
-                fontSize: 22,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 25),
-            TextFormField(
-              controller: emailController,
-              validator: (val) => val!.isEmpty ? 'Email required' : null,
-
-              decoration: InputDecoration(
-                hintText: "Enter the E-mail",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            SizedBox(height: 5),
-            TextFormField(
-              controller: passwordController,
-              validator: (val) => val!.length < 6
-                  ? 'Password must be at least 6 characters'
-                  : null,
-              obscureText: true,
-
-              decoration: InputDecoration(
-                hintText: "Enter the Password",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            loading
-                ? CircularProgressIndicator()
-                : ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      minimumSize: Size(double.infinity, 50),
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [greyColor, fieldColor],
+            begin: Alignment.topLeft,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
                     ),
-                    onPressed: () => registerUser(),
-                    child: Text("Register"),
+                    child: IntrinsicHeight(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 180),
+                            Text(
+                              "Register the User",
+                              style: GoogleFonts.unbounded(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 25),
+                            CustomTextField(
+                              labelText: "Enter the E-mail",
+                              backgroundColor: secondaryColor,
+                              keyboardType: TextInputType.emailAddress,
+                              controller: emailController,
+                              validator: (val) =>
+                                  val!.isEmpty ? 'Email required' : null,
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextField(
+                              controller: passwordController,
+                              labelText: "Enter the Passwor",
+                              validator: (val) => val!.length < 6
+                                  ? 'Password must be at least 6 characters'
+                                  : null,
+                              obsecureText: true,
+                              keyboardType: TextInputType.text,
+                            ),
+                            SizedBox(height: 20),
+                            loading
+                                ? CircularProgressIndicator()
+                                : ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: primaryColor,
+                                      foregroundColor: secondaryColor,
+                                      minimumSize: Size(double.infinity, 50),
+                                    ),
+                                    onPressed: () => registerUser(),
+                                    child: Text("Register"),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-          ],
+                );
+              },
+            ),
+          ),
         ),
       ),
     );

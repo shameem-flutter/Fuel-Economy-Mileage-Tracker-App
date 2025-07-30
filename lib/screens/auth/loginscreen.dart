@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:task/constants/color_constants.dart';
 import 'package:task/screens/auth/registerscreen.dart';
 import 'package:task/screens/tripinputscreen.dart';
 import 'package:task/widgets/textfield.dart';
@@ -48,84 +50,112 @@ class _LoginscreenState extends State<Loginscreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: greyColor,
+      appBar: AppBar(backgroundColor: Colors.transparent),
+      extendBodyBehindAppBar: true,
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [greyColor, fieldColor],
+            begin: Alignment.bottomRight,
+            end: Alignment.topCenter,
+          ),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 60),
+                            Row(
+                              children: [
+                                Text(
+                                  "Welcome To \nFuel Tracker App 🙌",
+                                  style: GoogleFonts.unbounded(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 60),
+                            CustomTextField(
+                              controller: emailController,
+                              backgroundColor: secondaryColor,
+                              labelColor: primaryColor,
+                              labelText: "Enter the E-mail",
+                              validator: (value) =>
+                                  value == null || value.trim().isEmpty
+                                  ? 'E-mail required'
+                                  : null,
+                              keyboardType: TextInputType.text,
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextField(
+                              controller: passwordController,
+                              backgroundColor: secondaryColor,
+                              labelColor: primaryColor,
+                              labelText: "Enter the Password",
+                              validator: (value) =>
+                                  value == null || value.trim().isEmpty
+                                  ? 'password required'
+                                  : null,
+                              keyboardType: TextInputType.text,
+                              obsecureText: true,
+                            ),
+                            SizedBox(height: 30),
+                            loading
+                                ? CircularProgressIndicator()
+                                : ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      minimumSize: Size(double.infinity, 45),
+                                      foregroundColor: primaryColor,
+                                    ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              SizedBox(height: 60),
-              Row(
-                children: [
-                  Text(
-                    "Welcome To Fuel Economy\n& Mileage Tracker App 🙌",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
+                                    onPressed: _loginUser,
+                                    child: Text("LOG-IN"),
+                                  ),
+                            SizedBox(height: 10),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(double.infinity, 45),
+                                backgroundColor: primaryColor,
+                                foregroundColor: secondaryColor,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Registerscreen(),
+                                  ),
+                                );
+                              },
+                              child: Text("Register"),
+                            ),
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: 60),
-              CustomTextField(
-                controller: emailController,
-                labelColor: Colors.white,
-                labelText: "Enter the E-mail",
-                validator: (value) => value == null || value.trim().isEmpty
-                    ? 'E-mail required'
-                    : null,
-                keyboardType: TextInputType.text,
-              ),
-              SizedBox(height: 10),
-              CustomTextField(
-                controller: passwordController,
-                labelColor: Colors.white,
-                labelText: "Enter the Password",
-                validator: (value) => value == null || value.trim().isEmpty
-                    ? 'password required'
-                    : null,
-                keyboardType: TextInputType.text,
-                obsecureText: true,
-              ),
-              SizedBox(height: 30),
-              loading
-                  ? CircularProgressIndicator()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size(150, 45),
-                            foregroundColor: Colors.black,
-                          ),
-
-                          onPressed: _loginUser,
-                          child: Text("LOG-IN"),
-                        ),
-                        SizedBox(width: 10),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size(150, 45),
-                            backgroundColor: Colors.black,
-                            foregroundColor: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Registerscreen(),
-                              ),
-                            );
-                          },
-                          child: Text("Register"),
-                        ),
-                      ],
-                    ),
-            ],
+                );
+              },
+            ),
           ),
         ),
       ),

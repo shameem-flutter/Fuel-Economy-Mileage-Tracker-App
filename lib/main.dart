@@ -7,6 +7,7 @@ import 'package:task/screens/tripinputscreen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

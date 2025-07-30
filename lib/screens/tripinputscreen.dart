@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:task/constants/color_constants.dart';
 import 'package:task/models/trip_model.dart';
+import 'package:task/responsive/responsive.dart';
 import 'package:task/screens/auth/loginscreen.dart';
 import 'package:task/screens/tripsummary.dart';
 import 'package:task/services/trip_service.dart';
@@ -84,123 +86,128 @@ class _TripInputScreenState extends State<TripInputScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("Fuel Trip Entry"),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => Loginscreen()),
-                (route) => false,
-              );
-            },
-            icon: Icon(Icons.logout),
-          ),
-        ],
-      ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blueGrey.shade100, Colors.white],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text("Fuel Trip Entry"),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => Loginscreen()),
+                  (route) => false,
+                );
+              },
+              icon: Icon(Icons.logout),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            child: Form(
-              key: _formKey,
-              child: ListView(
-                children: [
-                  Text(
-                    "🚗 Trip Details",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 20),
-
-                  Card(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          DropdownButtonFormField<String>(
-                            value: _selectedVehicle,
-                            dropdownColor: Colors.blueGrey[800],
-                            decoration: InputDecoration(
-                              labelText: "Vehicle Type",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            items: _vehicleTypes
-                                .map(
-                                  (v) => DropdownMenuItem(
-                                    value: v,
-                                    child: Text(v),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (val) =>
-                                setState(() => _selectedVehicle = val!),
-                          ),
-                          SizedBox(height: 16),
-                          CustomTextField(
-                            backgroundColor: Colors.blueGrey.shade200,
-                            controller: startOdoController,
-                            labelText: 'Start Odometer (km)',
-                            validator: _numberValidator,
-                          ),
-                          SizedBox(height: 12),
-                          CustomTextField(
-                            controller: endOdoController,
-                            backgroundColor: Colors.blueGrey.shade200,
-                            labelText: 'End Odometer (km)',
-                            validator: _numberValidator,
-                          ),
-                          SizedBox(height: 12),
-                          CustomTextField(
-                            controller: fuelFilledController,
-                            backgroundColor: Colors.blueGrey.shade200,
-                            labelText: 'Fuel Filled (L)',
-                            validator: _numberValidator,
-                          ),
-                          SizedBox(height: 12),
-                          CustomTextField(
-                            controller: fuelPriceController,
-                            labelText: 'Fuel Price (₹/L)',
-                            validator: _numberValidator,
-                            backgroundColor: Colors.blueGrey.shade200,
-                          ),
-                        ],
+          ],
+        ),
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [greyColor, secondaryColor],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    Text(
+                      "🚗 Trip Details",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
+                    SizedBox(height: 20),
 
-                  SizedBox(height: 30),
-                  ElevatedButton.icon(
-                    icon: Icon(Icons.save),
-                    label: Text("Save Trip"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      minimumSize: Size(double.infinity, 50),
+                    Card(
+                      elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      child: Padding(
+                        padding: EdgeInsets.all(R.sh(16, context)),
+                        child: Column(
+                          children: [
+                            DropdownButtonFormField<String>(
+                              value: _selectedVehicle,
+                              dropdownColor: greyColor,
+                              decoration: InputDecoration(
+                                labelText: "Vehicle Type",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              items: _vehicleTypes
+                                  .map(
+                                    (v) => DropdownMenuItem(
+                                      value: v,
+                                      child: Text(v),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (val) =>
+                                  setState(() => _selectedVehicle = val!),
+                            ),
+                            SizedBox(height: 16),
+                            CustomTextField(
+                              backgroundColor: greyColor,
+                              controller: startOdoController,
+                              labelText: 'Start Odometer (km)',
+                              validator: _numberValidator,
+                            ),
+                            SizedBox(height: 12),
+                            CustomTextField(
+                              controller: endOdoController,
+                              backgroundColor: greyColor,
+                              labelText: 'End Odometer (km)',
+                              validator: _numberValidator,
+                            ),
+                            SizedBox(height: 12),
+                            CustomTextField(
+                              controller: fuelFilledController,
+                              backgroundColor: greyColor,
+                              labelText: 'Fuel Filled (L)',
+                              validator: _numberValidator,
+                            ),
+                            SizedBox(height: 12),
+                            CustomTextField(
+                              controller: fuelPriceController,
+                              labelText: 'Fuel Price (₹/L)',
+                              validator: _numberValidator,
+                              backgroundColor: greyColor,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    onPressed: submit,
-                  ),
-                ],
+
+                    SizedBox(height: 30),
+                    ElevatedButton.icon(
+                      icon: Icon(Icons.save),
+                      label: Text("Save Trip"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        foregroundColor: secondaryColor,
+                        minimumSize: Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: submit,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
